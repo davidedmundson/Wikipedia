@@ -299,7 +299,7 @@ class WikipediaPage(object):
     self.__load(redirect=redirect, preload=preload)
 
     if preload:
-      for prop in ('content', 'summary', 'images', 'references', 'links', 'sections'):
+      for prop in ('content', 'summary', 'images', 'references', 'links', 'sections', 'thumbnail'):
         getattr(self, prop)
 
   def __repr__(self):
@@ -336,6 +336,7 @@ class WikipediaPage(object):
     request = _wiki_request(query_params)
 
     query = request['query']
+
     pageid = list(query['pages'].keys())[0]
     page = query['pages'][pageid]
 
@@ -551,6 +552,26 @@ class WikipediaPage(object):
       ]
 
     return self._images
+
+
+  @property
+  def thumbnail(self):
+    '''Main image for an article'''
+    if not getattr(self, '_thumbnail', False):
+      self._thumbnail = None
+      query_params = {
+        'prop': 'pageimages',
+        'pageids': self.pageid,
+        'pilicense': 'any',
+        'pithumbsize': 200
+      }
+      request = _wiki_request(query_params)
+      if 'query' in request:
+        page = request['query']['pages'][self.pageid]
+        if 'thumbnail' in page:
+          self._thumbnail = page['thumbnail']['source']
+    return self._thumbnail
+
 
   @property
   def coordinates(self):

@@ -31,7 +31,7 @@ setuptools.setup(
   description = "Wikipedia API for Python",
   license = "MIT",
   keywords = "python wikipedia API",
-  url = "https://github.com/goldsmith/Wikipedia",
+  url = "https://github.com/davidedmundson/Wikipedia",
   install_requires = install_reqs,
   packages = ['wikipedia'],
   long_description = local_file('README.rst').read(),
